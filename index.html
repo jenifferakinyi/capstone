@@ -1,33 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Netlify Form</title>
-  <style>
-    body { font-family: sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; line-height: 1.6; }
-    form { display: flex; flex-direction: column; gap: 15px; }
-    input, textarea, button { padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
-    button { background: #00ad9f; color: white; border: none; cursor: pointer; font-weight: bold; }
-    button:hover { background: #008c81; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FarmUP AI</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 </head>
+
 <body>
 
-  <h2>Share Your Truth</h2>
-  
-  <form name="truth-form" method="POST" data-netlify="true">
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" required placeholder="Your name">
+<nav>
 
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" required placeholder="Your email">
+<div class="logo">
+🐔 FarmUP
+</div>
 
-    <label for="truth">The Truth</label>
-    <textarea id="truth" name="truth" rows="4" required placeholder="What is the truth you want to share?"></textarea>
+<ul>
+<li><a href="#home">Home</a></li>
+<li><a href="#register">Register Farm</a></li>
+<li><a href="pages/dashboard.html">Dashboard</a></li>
+<li><a href="pages/governance.html">PRIDE Loop</a></li>
+</ul>
 
-    <button type="submit">Submit to Netlify</button>
-  </form>
+</nav>
+
+<section class="hero" id="home">
+
+<div class="hero-content">
+
+<h1>Empowering Poultry Farmers Through AI</h1>
+
+<p>
+Trusted Multi-Agent Intelligence for Women and Youth Farmers Across Kenya.
+</p>
+
+<a href="#register" class="btn">Register Farm</a>
+
+</div>
+
+</section>
+
+<section class="stats">
+
+<div class="card">
+<h2>37%</h2>
+<p>Loan Approval Increase</p>
+</div>
+
+<div class="card">
+<h2>42%</h2>
+<p>Mortality Reduction</p>
+</div>
+
+<div class="card">
+<h2>31%</h2>
+<p>Egg Production Growth</p>
+</div>
+
+<div class="card">
+<h2>95%</h2>
+<p>Data Governance</p>
+</div>
+
+</section>
+
+<section id="register">
+
+<h2 class="section-title">Farm Registration</h2>
+
+<form id="farmForm">
+
+<input
+type="text"
+id="name"
+placeholder="Farmer Name"
+required
+>
+
+<input
+type="text"
+id="county"
+placeholder="County"
+required
+>
+
+<select id="gender">
+
+<option>Female</option>
+<option>Male</option>
+
+</select>
+
+<select id="birdType">
+
+<option>Layer</option>
+<option>Kienyeji</option>
+
+</select>
+
+<input
+type="number"
+id="birds"
+placeholder="Number of Birds"
+required
+>
+
+<input
+type="number"
+id="income"
+placeholder="Monthly Income"
+required
+>
+
+<button type="submit">
+Submit Farm Data
+</button>
+
+</form>
+
+<div id="success"></div>
+
+</section>
+
+<script src="app.js"></script>
 
 </body>
 </html>
