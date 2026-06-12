@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login – FarmUP</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --soil:#2C1810;
+    --soil-mid:#4A2E22;
+    --green:#3D6B35;
+    --green-light:#5A9050;
+    --green-pale:#E6F0E4;
+    --gold:#E8A020;
+    --gold-light:#F5C050;
+    --sky:#F0F7EE;
+    --warm-white:#FFFDF8;
+    --muted:#6B7C69;
+    --border:#D4E4D0;
+}
+
+body{
+    font-family:'DM Sans',sans-serif;
+    background:var(--sky);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+/* HEADER */
+
+header{
+    background:var(--soil);
+}
+
+.header-inner{
+    max-width:1200px;
+    margin:auto;
+    height:70px;
+    padding:0 2rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    text-decoration:none;
+}
+
+.logo-mark{
+    width:40px;
+    height:40px;
+    background:var(--gold);
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.logo-name{
+    font-family:'DM Serif Display',serif;
+    color:white;
+    font-size:1.8rem;
+}
+
+.logo-name b{
+    color:var(--gold);
+    font-weight:400;
+}
+
+.header-link{
+    color:#A8BCA6;
+    text-decoration:none;
+    font-size:.9rem;
+}
+
+.header-link span{
+    color:var(--gold);
+    font-weight:700;
+}
+
+/* PAGE */
+
+.container{
+    flex:1;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+}
+
+/* LEFT */
+
+.left-panel{
+    background:var(--soil);
+    color:white;
+    padding:4rem;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.left-panel h2{
+    font-family:'DM Serif Display',serif;
+    font-size:3rem;
+    margin-bottom:1rem;
+    line-height:1.1;
+}
+
+.left-panel h2 span{
+    color:var(--gold);
+}
+
+.left-panel p{
+    color:#9BB096;
+    line-height:1.8;
+    max-width:450px;
+}
+
+.quote{
+    margin-top:2rem;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:12px;
+    padding:1.5rem;
+}
+
+.quote p{
+    color:#D4E4D0;
+    font-style:italic;
+}
+
+/* RIGHT */
+
+.right-panel{
+    background:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:2rem;
+}
+
+.login-card{
+    width:100%;
+    max-width:450px;
+}
+
+.eyebrow{
+    color:var(--gold);
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:.75rem;
+    font-weight:700;
+    margin-bottom:.5rem;
+}
+
+.login-card h1{
+    font-family:'DM Serif Display',serif;
+    margin-bottom:.5rem;
+    color:var(--soil);
+}
+
+.login-card p{
+    color:var(--muted);
+    margin-bottom:2rem;
+}
+
+.field{
+    margin-bottom:1rem;
+}
+
+.field label{
+    display:block;
+    margin-bottom:.4rem;
+    font-weight:600;
+    font-size:.85rem;
+}
+
+.field input{
+    width:100%;
+    padding:.9rem 1rem;
+    border:1.5px solid var(--border);
+    border-radius:8px;
+    background:var(--sky);
+    font-size:.9rem;
+}
+
+.field input:focus{
+    outline:none;
+    border-color:var(--green);
+}
+
+.options{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:1.5rem;
+    font-size:.85rem;
+}
+
+.options a{
+    color:var(--green);
+    text-decoration:none;
+    font-weight:600;
+}
+
+.btn-login{
+    width:100%;
+    border:none;
+    background:var(--green);
+    color:white;
+    padding:1rem;
+    border-radius:8px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn-login:hover{
+    background:var(--green-light);
+}
+
+.register-link{
+    text-align:center;
+    margin-top:1.5rem;
+    color:var(--muted);
+}
+
+.register-link a{
+    color:var(--green);
+    text-decoration:none;
+    font-weight:700;
+}
+
+footer{
+    background:var(--soil);
+    text-align:center;
+    padding:1rem;
+    color:#7A9478;
+}
+
+@media(max-width:900px){
+    .container{
+        grid-template-columns:1fr;
+    }
+
+    .left-panel{
+        display:none;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+
+        <a href="index.html" class="logo">
+            <div class="logo-mark">🌱</div>
+            <span class="logo-name">Farm<b>UP</b></span>
+        </a>
+
+        <a href="register.html" class="header-link">
+            New here?
+            <span>Register →</span>
+        </a>
+
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="left-panel">
+
+        <h2>Welcome back to <span>FarmUP</span></h2>
+
+        <p>
+            Access your poultry dashboard, disease alerts,
+            market prices, flock records and AI-powered farm
+            recommendations anytime.
+        </p>
+
+        <div class="quote">
+            <p>
+                "FarmUP helped me reduce losses and improve
+                egg production by over 30%."
+            </p>
+        </div>
+
+    </div>
+
+    <div class="right-panel">
+
+        <div class="login-card">
+
+            <div class="eyebrow">Farmer Login</div>
+
+            <h1>Sign In</h1>
+
+            <p>Enter your credentials to access your account.</p>
+
+            <form id="loginForm">
+
+                <div class="field">
+                    <label>Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="you@example.com"
+                        required>
+                </div>
+
+                <div class="field">
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        required>
+                </div>
+
+                <div class="options">
+                    <label>
+                        <input type="checkbox">
+                        Remember me
+                    </label>
+
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Login to FarmUP
+                </button>
+
+            </form>
+
+            <div class="register-link">
+                Don't have an account?
+                <a href="register.html">Create Account</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    © 2026 FarmUP • Smart Poultry Farming Platform
+</footer>
+
+<script>
+document.getElementById("loginForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const email =
+    document.getElementById("email").value;
+
+    alert("Welcome back " + email);
+
+    // Redirect to dashboard
+    window.location.href = "dashboard.html";
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Farm Dashboard – FarmUP</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --soil:        #2C1810;
+      --soil-mid:    #4A2E22;
+      --green:       #3D6B35;
+      --green-light: #5A9050;
+      --green-pale:  #E6F0E4;
+      --gold:        #E8A020;
+      --gold-light:  #F5C050;
+      --sky:         #F0F7EE;
+      --warm-white:  #FFFDF8;
+      --muted:       #6B7C69;
+      --border:      #D4E4D0;
+      --red:         #C0392B;
+      --red-pale:    #FDF0EE;
+      --orange:      #E67E22;
+      --orange-pale: #FEF5EC;
+      --blue:        #2980B9;
+      --blue-pale:   #EBF5FB;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--sky);
+      color: var(--soil);
+      min-height: 100vh;
+    }
+
+    /* ─── TOP NAV ─── */
+    header {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--soil);
+      border-bottom: 1px solid var(--soil-mid);
+    }
+    .header-inner {
+      max-width: 1320px; margin: 0 auto;
+      padding: 0 1.5rem; height: 64px;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .logo { display: flex; align-items: center; gap: 0.55rem; text-decoration: none; }
+    .logo-mark {
+      width: 36px; height: 36px; background: var(--gold); border-radius: 7px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .logo-name { font-family: 'DM Serif Display', serif; font-size: 1.75rem; color: var(--warm-white); line-height: 1; }
+    .logo-name b { color: var(--gold); font-weight: 400; }
+
+    .header-center {
+      flex: 1; max-width: 340px;
+      display: flex; align-items: center;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 0 0.75rem; gap: 0.5rem;
+    }
+    .header-center svg { flex-shrink: 0; opacity: 0.5; }
+    .header-center input {
+      background: none; border: none; outline: none;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+      color: var(--warm-white); width: 100%;
+    }
+    .header-center input::placeholder { color: #6B7C69; }
+
+    .header-right { display: flex; align-items: center; gap: 0.6rem; }
+
+    .notif-btn {
+      width: 38px; height: 38px; border-radius: 8px; border: none;
+      background: rgba(255,255,255,0.07); cursor: pointer; display: flex; align-items: center; justify-content: center;
+      position: relative; transition: background 0.18s;
+    }
+    .notif-btn:hover { background: rgba(255,255,255,0.13); }
+    .notif-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+      position: absolute; top: 7px; right: 7px; border: 1.5px solid var(--soil);
+    }
+
+    .profile-btn {
+      display: flex; align-items: center; gap: 0.55rem;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 0.4rem 0.75rem; cursor: pointer; text-decoration: none;
+      transition: background 0.18s;
+    }
+    .profile-btn:hover { background: rgba(255,255,255,0.13); }
+    .avatar {
+      width: 28px; height: 28px; border-radius: 50%; background: var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .profile-btn span { font-size: 0.82rem; color: var(--warm-white); font-weight: 600; }
+
+    /* ─── LAYOUT ─── */
+    .layout {
+      display: grid;
+      grid-template-columns: 228px 1fr;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 0;
+      display: flex; flex-direction: column; gap: 0;
+      position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto;
+    }
+
+    .sidebar-section-label {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #B0C0AE; padding: 0.85rem 1.25rem 0.4rem; margin-top: 0.25rem;
+    }
+    .sidebar-section-label:first-child { margin-top: 0; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.65rem 1.25rem; font-size: 0.85rem; font-weight: 500; color: var(--muted);
+      text-decoration: none; cursor: pointer; border: none; background: none; width: 100%;
+      text-align: left; border-left: 3px solid transparent; transition: all 0.15s;
+    }
+    .nav-item svg { flex-shrink: 0; opacity: 0.7; }
+    .nav-item:hover { background: var(--sky); color: var(--green); }
+    .nav-item:hover svg { opacity: 1; }
+    .nav-item.active {
+      background: var(--green-pale); color: var(--green);
+      border-left-color: var(--green); font-weight: 700;
+    }
+    .nav-item.active svg { opacity: 1; }
+
+    .nav-badge {
+      margin-left: auto; font-size: 0.68rem; font-weight: 700;
+      background: var(--gold); color: var(--soil);
+      padding: 0.1rem 0.45rem; border-radius: 999px; flex-shrink: 0;
+    }
+    .nav-badge.red { background: var(--red); color: #fff; }
+
+    .sidebar-bottom {
+      margin-top: auto; padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    .guardian-pill {
+      display: flex; align-items: center; gap: 0.6rem;
+      background: var(--soil); border-radius: 10px; padding: 0.75rem 0.85rem;
+    }
+    .guardian-pulse {
+      width: 8px; height: 8px; border-radius: 50%; background: #7DC870;
+      flex-shrink: 0; box-shadow: 0 0 0 3px rgba(125,200,112,0.25);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 3px rgba(125,200,112,0.25); } 50% { box-shadow: 0 0 0 6px rgba(125,200,112,0.1); } }
+    .guardian-text { font-size: 0.75rem; color: #8FA48D; line-height: 1.4; }
+    .guardian-text strong { color: var(--gold); font-size: 0.72rem; display: block; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ─── MAIN ─── */
+    .main { padding: 2rem 1.75rem; max-width: 100%; overflow-x: hidden; }
+
+    /* Page header */
+    .page-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .page-header-left h1 {
+      font-family: 'DM Serif Display', serif; font-size: 1.75rem;
+      color: var(--soil); line-height: 1.2; margin-bottom: 0.25rem;
+    }
+    .page-header-left p { font-size: 0.85rem; color: var(--muted); }
+    .page-header-right { display: flex; gap: 0.6rem; align-items: center; }
+
+    .btn-sm {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600;
+      padding: 0.55rem 1rem; border-radius: 7px; cursor: pointer; border: none;
+      transition: all 0.15s; text-decoration: none;
+    }
+    .btn-outline { background: #fff; color: var(--green); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--green); background: var(--green-pale); }
+    .btn-primary { background: var(--green); color: #fff; }
+    .btn-primary:hover { background: var(--green-light); }
+    .btn-gold { background: var(--gold); color: var(--soil); }
+    .btn-gold:hover { background: var(--gold-light); }
+
+    /* ─── ALERT BANNER ─── */
+    .alert-banner {
+      display: flex; align-items: center; gap: 0.85rem;
+      background: var(--orange-pale); border: 1.5px solid #F5CBA7;
+      border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 1.5rem;
+    }
+    .alert-icon {
+      width: 34px; height: 34px; border-radius: 8px; background: rgba(230,126,34,0.15);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .alert-banner p { font-size: 0.83rem; color: #7D4C1A; line-height: 1.5; flex: 1; }
+    .alert-banner strong { font-weight: 700; color: #5D340E; }
+    .alert-dismiss {
+      background: none; border: none; cursor: pointer; color: #B07A4A; font-size: 1.1rem; flex-shrink: 0;
+    }
+
+    /* ─── KPI STRIP ─── */
+    .kpi-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .kpi-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.5rem;
+      transition: box-shadow 0.18s;
+    }
+    .kpi-card:hover { box-shadow: 0 2px 16px rgba(61,107,53,0.08); }
+    .kpi-top { display: flex; align-items: center; justify-content: space-between; }
+    .kpi-label { font-size: 0.72rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.09em; }
+    .kpi-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .kpi-value { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--soil); line-height: 1; }
+    .kpi-meta { display: flex; align-items: center; gap: 0.4rem; }
+    .kpi-change {
+      font-size: 0.72rem; font-weight: 700; padding: 0.15rem 0.45rem;
+      border-radius: 999px; display: inline-flex; align-items: center; gap: 0.2rem;
+    }
+    .kpi-change.up { background: rgba(61,107,53,0.1); color: var(--green); }
+    .kpi-change.down { background: rgba(192,57,43,0.1); color: var(--red); }
+    .kpi-change.neutral { background: rgba(107,124,105,0.1); color: var(--muted); }
+    .kpi-sub { font-size: 0.72rem; color: var(--muted); }
+
+    /* ─── GRID 2-COL ─── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+    .grid-3-2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+    .span-2 { grid-column: span 2; }
+
+    /* ─── CARD ─── */
+    .card {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 1.1rem 1.25rem 0.85rem; display: flex; align-items: center;
+      justify-content: space-between; border-bottom: 1px solid var(--border);
+    }
+    .card-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--soil); }
+    .card-sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+    .card-body { padding: 1.1rem 1.25rem; }
+    .card-footer {
+      padding: 0.7rem 1.25rem; border-top: 1px solid var(--border);
+      background: var(--sky); display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-footer-text { font-size: 0.75rem; color: var(--muted); }
+
+    /* ─── EGG CHART (SVG bar chart) ─── */
+    .egg-chart { padding: 0.85rem 1.25rem 1.25rem; }
+    .chart-bars {
+      display: flex; align-items: flex-end; gap: 0.55rem; height: 110px;
+      padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+    }
+    .bar-group { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; flex: 1; }
+    .bar {
+      width: 100%; border-radius: 5px 5px 0 0;
+      background: var(--green-pale); border: 1.5px solid var(--border);
+      transition: all 0.3s; cursor: pointer; position: relative;
+    }
+    .bar:hover { background: var(--green); border-color: var(--green); }
+    .bar.current { background: var(--green); border-color: var(--green); }
+    .bar-label { font-size: 0.65rem; color: var(--muted); font-weight: 600; }
+    .bar-val { font-size: 0.68rem; color: var(--green); font-weight: 700; }
+    .chart-summary {
+      display: flex; gap: 1.5rem; margin-top: 0.85rem;
+    }
+    .cs-item { }
+    .cs-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+    .cs-val { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--soil); }
+
+    /* ─── FLOCK BREAKDOWN ─── */
+    .flock-list { display: flex; flex-direction: column; gap: 0.65rem; }
+    .flock-row {
+      display: flex; align-items: center; gap: 0.85rem;
+      padding: 0.7rem 0.9rem; border: 1px solid var(--border); border-radius: 9px;
+      transition: border-color 0.15s; cursor: pointer;
+    }
+    .flock-row:hover { border-color: var(--green); background: var(--sky); }
+    .flock-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;
+    }
+    .flock-info { flex: 1; }
+    .flock-name { font-size: 0.85rem; font-weight: 600; color: var(--soil); margin-bottom: 0.15rem; }
+    .flock-detail { font-size: 0.72rem; color: var(--muted); }
+    .flock-count { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--soil); }
+    .flock-health {
+      font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem;
+      border-radius: 999px; white-space: nowrap;
+    }
+    .flock-health.good { background: var(--green-pale); color: var(--green); }
+    .flock-health.watch { background: var(--orange-pale); color: var(--orange); }
+    .flock-health.alert { background: var(--red-pale); color: var(--red); }
+
+    /* ─── VACCINATION TIMELINE ─── */
+    .vacc-list { display: flex; flex-direction: column; gap: 0; }
+    .vacc-item {
+      display: flex; align-items: flex-start; gap: 0.85rem;
+      padding: 0.85rem 0; border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .vacc-item:last-child { border-bottom: none; }
+    .vacc-dot-wrap { display: flex; flex-direction: column; align-items: center; gap: 0; flex-shrink: 0; margin-top: 3px; }
+    .vacc-dot {
+      width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+    }
+    .vacc-dot.done { background: var(--green); }
+    .vacc-dot.upcoming { background: var(--gold); border: 2px solid var(--gold-light); }
+    .vacc-dot.due { background: var(--red); animation: pulse 2s ease infinite; }
+    .vacc-info { flex: 1; }
+    .vacc-name { font-size: 0.85rem; font-weight: 600; color: var(--soil); margin-bottom: 0.15rem; }
+    .vacc-detail { font-size: 0.72rem; color: var(--muted); line-height: 1.45; }
+    .vacc-badge {
+      font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 999px;
+      flex-shrink: 0; white-space: nowrap; margin-top: 2px;
+    }
+    .vacc-badge.done { background: var(--green-pale); color: var(--green); }
+    .vacc-badge.upcoming { background: rgba(232,160,32,0.12); color: var(--gold); border: 1px solid rgba(232,160,32,0.3); }
+    .vacc-badge.due-now { background: var(--red-pale); color: var(--red); }
+
+    /* ─── DISEASE ALERT ─── */
+    .disease-card { }
+    .disease-risk-meter {
+      display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .risk-gauge {
+      flex-shrink: 0; width: 72px; height: 72px; position: relative;
+    }
+    .risk-gauge svg { width: 100%; height: 100%; }
+    .risk-label-center {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .risk-pct { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--orange); }
+    .risk-word { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .risk-meta { flex: 1; }
+    .risk-title { font-size: 0.85rem; font-weight: 700; color: var(--soil); margin-bottom: 0.35rem; }
+    .risk-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+    .disease-tips { padding: 0.85rem 1.25rem; display: flex; flex-direction: column; gap: 0.55rem; }
+    .tip-row { display: flex; align-items: center; gap: 0.65rem; font-size: 0.8rem; color: var(--muted); }
+    .tip-icon {
+      width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ─── VET CARD ─── */
+    .vet-list { display: flex; flex-direction: column; gap: 0.65rem; }
+    .vet-item {
+      display: flex; align-items: center; gap: 0.85rem;
+      padding: 0.85rem 1rem; border: 1px solid var(--border); border-radius: 10px;
+      transition: all 0.15s;
+    }
+    .vet-item:hover { border-color: var(--green); background: var(--sky); }
+    .vet-avatar {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .vet-info { flex: 1; }
+    .vet-name { font-size: 0.87rem; font-weight: 700; color: var(--soil); }
+    .vet-spec { font-size: 0.72rem; color: var(--muted); }
+    .vet-avail {
+      font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+    }
+    .vet-avail.online { background: var(--green-pale); color: var(--green); }
+    .vet-avail.busy { background: var(--orange-pale); color: var(--orange); }
+
+    /* ─── LOAN READINESS ─── */
+    .loan-score-wrap {
+      display: flex; align-items: center; gap: 1.5rem;
+      padding: 1.25rem 1.25rem 1rem; border-bottom: 1px solid var(--border);
+    }
+    .loan-score-circle {
+      width: 80px; height: 80px; border-radius: 50%; flex-shrink: 0;
+      background: conic-gradient(var(--gold) 0% 67%, var(--border) 67% 100%);
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+    .loan-score-inner {
+      width: 60px; height: 60px; border-radius: 50%; background: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .loan-score-num { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--soil); line-height: 1; }
+    .loan-score-max { font-size: 0.6rem; color: var(--muted); }
+    .loan-score-info { flex: 1; }
+    .loan-score-title { font-size: 0.9rem; font-weight: 700; color: var(--soil); margin-bottom: 0.3rem; }
+    .loan-score-sub { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+    .loan-criteria { padding: 0.85rem 1.25rem; display: flex; flex-direction: column; gap: 0.55rem; }
+    .criteria-row { display: flex; align-items: center; gap: 0.7rem; }
+    .criteria-label { font-size: 0.8rem; color: var(--soil); flex: 1; font-weight: 500; }
+    .criteria-bar-wrap { width: 90px; height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; }
+    .criteria-bar { height: 100%; border-radius: 999px; }
+    .criteria-val { font-size: 0.72rem; font-weight: 700; color: var(--muted); width: 28px; text-align: right; }
+
+    /* ─── MARKET CONNECT ─── */
+    .market-tabs {
+      display: flex; gap: 0; border-bottom: 1px solid var(--border);
+    }
+    .market-tab {
+      flex: 1; padding: 0.65rem 0.5rem; font-size: 0.8rem; font-weight: 600;
+      text-align: center; cursor: pointer; border: none; background: none;
+      color: var(--muted); border-bottom: 2.5px solid transparent;
+      transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+    }
+    .market-tab.active { color: var(--green); border-bottom-color: var(--green); background: var(--sky); }
+
+    .buyer-list { padding: 0.75rem 1.25rem; display: flex; flex-direction: column; gap: 0.65rem; }
+    .buyer-card {
+      display: flex; align-items: center; gap: 0.85rem;
+      padding: 0.85rem 1rem; border: 1px solid var(--border); border-radius: 10px;
+      transition: all 0.15s; cursor: pointer;
+    }
+    .buyer-card:hover { border-color: var(--green); box-shadow: 0 2px 12px rgba(61,107,53,0.07); }
+    .buyer-avatar {
+      width: 38px; height: 38px; border-radius: 9px; background: var(--green-pale);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .buyer-info { flex: 1; }
+    .buyer-name { font-size: 0.87rem; font-weight: 700; color: var(--soil); margin-bottom: 0.15rem; }
+    .buyer-need { font-size: 0.73rem; color: var(--muted); }
+    .buyer-right { text-align: right; }
+    .buyer-price { font-size: 0.85rem; font-weight: 700; color: var(--green); margin-bottom: 0.15rem; }
+    .buyer-dist { font-size: 0.7rem; color: var(--muted); }
+    .buyer-urgent {
+      font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.4rem;
+      border-radius: 999px; background: var(--red-pale); color: var(--red);
+    }
+
+    .price-ticker {
+      display: flex; gap: 0; overflow-x: auto; padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border); scrollbar-width: none;
+    }
+    .price-ticker::-webkit-scrollbar { display: none; }
+    .ticker-item {
+      flex-shrink: 0; padding: 0.6rem 1rem; border-right: 1px solid var(--border);
+      last-child: no border;
+    }
+    .ticker-item:last-child { border-right: none; }
+    .ticker-name { font-size: 0.68rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+    .ticker-price { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--soil); margin: 0.2rem 0; }
+    .ticker-change { font-size: 0.68rem; font-weight: 700; }
+    .ticker-change.up { color: var(--green); }
+    .ticker-change.down { color: var(--red); }
+
+    /* ─── PROFILE CARD ─── */
+    .profile-card {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.1rem 1.25rem; border-bottom: 1px solid var(--border);
+    }
+    .profile-avatar-big {
+      width: 52px; height: 52px; border-radius: 50%; background: var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .profile-name { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--soil); }
+    .profile-meta { font-size: 0.75rem; color: var(--muted); }
+    .profile-fields { padding: 0.85rem 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .pf-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; }
+    .pf-label { color: var(--muted); font-weight: 500; width: 100px; flex-shrink: 0; }
+    .pf-val { color: var(--soil); font-weight: 600; }
+    .pf-badge {
+      font-size: 0.68rem; font-weight: 700; padding: 0.15rem 0.45rem;
+      border-radius: 999px; background: var(--green-pale); color: var(--green);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1100px) {
+      .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .grid-3-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .header-center { display: none; }
+      .kpi-strip { grid-template-columns: 1fr 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .kpi-strip { grid-template-columns: 1fr 1fr; }
+      .main { padding: 1.25rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2C1810" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C12 2 5 8 5 14a7 7 0 0 0 14 0C19 8 12 2 12 2Z"/>
+          <line x1="12" y1="2" x2="12" y2="21"/>
+          <path d="M12 12 L8 9" opacity="0.6"/>
+          <path d="M12 9 L16 7" opacity="0.6"/>
+        </svg>
+      </div>
+      <span class="logo-name">Farm<b>UP</b></span>
+    </a>
+
+    <div class="header-center">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7C69" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search farm records, buyers, vets…">
+    </div>
+
+    <div class="header-right">
+      <button class="notif-btn" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A8BCA6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="notif-dot"></div>
+      </button>
+      <a href="#" class="profile-btn">
+        <div class="avatar">GM</div>
+        <span>Grace M.</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════ LAYOUT ══════════ -->
+<div class="layout">
+
+  <!-- ══════ SIDEBAR ══════ -->
+  <aside class="sidebar">
+    <span class="sidebar-section-label">Overview</span>
+    <button class="nav-item active" onclick="showSection('overview')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-item" onclick="showSection('flock')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M3 21v-1a8 8 0 0 1 16 0v1"/></svg>
+      My Flock
+    </button>
+    <button class="nav-item" onclick="showSection('eggs')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="5" ry="7"/></svg>
+      Egg Records
+    </button>
+
+    <span class="sidebar-section-label">Health</span>
+    <button class="nav-item" onclick="showSection('vacc')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Vaccination Schedule
+      <span class="nav-badge red">1 DUE</span>
+    </button>
+    <button class="nav-item" onclick="showSection('disease')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Disease Alerts
+    </button>
+    <button class="nav-item" onclick="showSection('vet')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      Veterinary Help
+    </button>
+
+    <span class="sidebar-section-label">Business</span>
+    <button class="nav-item" onclick="showSection('market')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      Market Connect
+      <span class="nav-badge">3 NEW</span>
+    </button>
+    <button class="nav-item" onclick="showSection('loan')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Loan Readiness
+    </button>
+    <button class="nav-item" onclick="showSection('finance')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Financial Coach
+    </button>
+
+    <div class="sidebar-bottom">
+      <div class="guardian-pill">
+        <div class="guardian-pulse"></div>
+        <div class="guardian-text">
+          <strong>Guardian Agent</strong>
+          All advice reviewed &amp; safe
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════ MAIN CONTENT ══════ -->
+  <main class="main" id="mainContent">
+
+    <!-- ── OVERVIEW / DASHBOARD ── -->
+    <div id="section-overview">
+
+      <!-- Alert banner -->
+      <div class="alert-banner" id="alertBanner">
+        <div class="alert-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E67E22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <p><strong>Newcastle Disease vaccination is due today</strong> — your Layer flock (220 birds) is on Day 18. Administer La Sota vaccine via drinking water. <a href="#" style="color:var(--orange);font-weight:700;text-decoration:underline;">View vaccine guide →</a></p>
+        <button class="alert-dismiss" onclick="document.getElementById('alertBanner').style.display='none'">×</button>
+      </div>
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1>Good morning, Grace 🌱</h1>
+          <p>Thursday, 11 June 2026 · Kajiado County · Last updated 6 mins ago</p>
+        </div>
+        <div class="page-header-right">
+          <button class="btn-sm btn-outline">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="9" y2="18"/></svg>
+            Reports
+          </button>
+          <button class="btn-sm btn-primary">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Log Today's Data
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI strip -->
+      <div class="kpi-strip">
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Total Birds</span>
+            <div class="kpi-icon" style="background:rgba(61,107,53,0.1);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3D6B35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M3 21v-1a8 8 0 0 1 16 0v1"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">430</div>
+          <div class="kpi-meta">
+            <span class="kpi-change up">↑ +30</span>
+            <span class="kpi-sub">since last month</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Eggs This Week</span>
+            <div class="kpi-icon" style="background:rgba(232,160,32,0.12);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8A020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="5" ry="7"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">1,540</div>
+          <div class="kpi-meta">
+            <span class="kpi-change up">↑ 8%</span>
+            <span class="kpi-sub">vs last week</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Weekly Revenue</span>
+            <div class="kpi-icon" style="background:rgba(41,128,185,0.1);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2980B9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">KSh 7,392</div>
+          <div class="kpi-meta">
+            <span class="kpi-change up">↑ 12%</span>
+            <span class="kpi-sub">eggs + birds sold</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Loan Score</span>
+            <div class="kpi-icon" style="background:rgba(232,160,32,0.12);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8A020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">67<span style="font-size:1rem;color:var(--muted)">/100</span></div>
+          <div class="kpi-meta">
+            <span class="kpi-change neutral">→ Moderate</span>
+            <span class="kpi-sub">re-evaluated monthly</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 1: Egg Chart + Flock -->
+      <div class="grid-2">
+
+        <!-- Egg production chart -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Weekly Egg Production</div>
+              <div class="card-sub">Trays collected per week · last 8 weeks</div>
+            </div>
+            <button class="btn-sm btn-outline" style="font-size:0.72rem;padding:0.4rem 0.75rem;">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 15 15 9 9 15 3 9"/></svg>
+              Export
+            </button>
+          </div>
+          <div class="egg-chart">
+            <div class="chart-bars">
+              <div class="bar-group">
+                <div class="bar-val">36</div>
+                <div class="bar" style="height:58px;" title="36 trays"></div>
+                <div class="bar-label">Wk 1</div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-val">39</div>
+                <div class="bar" style="height:63px;" title="39 trays"></div>
+                <div class="bar-label">Wk 2</div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-val">37</div>
+                <div class="bar" style="height:60px;" title="37 trays"></div>
+                <div class="bar-label">Wk 3</div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-val">41</div>
+                <div class="bar" style="height:66px;" title="41 trays"></div>
+                <div class="bar-label">Wk 4</div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-val">38</div>
+                <div class="bar" style="height:61px;" title="38 trays"></div>
+                <div class="bar-label">Wk 5</div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-val">44</div>
+                <div class="bar" style="height:71px;" title="44 trays"></div>
+                <div class="bar-label">Wk 6</div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-val">42</div>
+                <div class="bar" style="height:68px;" title="42 trays"></div>
+                <div class="bar-label">Wk 7</div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-val">51</div>
+                <div class="bar current" style="height:82px;" title="51 trays – this week"></div>
+                <div class="bar-label">Wk 8 ✦</div>
+              </div>
+            </div>
+            <div class="chart-summary">
+              <div class="cs-item">
+                <div class="cs-label">This week</div>
+                <div class="cs-val">51 trays</div>
+              </div>
+              <div class="cs-item">
+                <div class="cs-label">8-wk total</div>
+                <div class="cs-val">328 trays</div>
+              </div>
+              <div class="cs-item">
+                <div class="cs-label">Avg / week</div>
+                <div class="cs-val">41 trays</div>
+              </div>
+              <div class="cs-item">
+                <div class="cs-label">Lay rate</div>
+                <div class="cs-val">78%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flock overview -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">My Flock</div>
+              <div class="card-sub">430 birds across 3 groups</div>
+            </div>
+            <button class="btn-sm btn-primary" style="font-size:0.72rem;padding:0.4rem 0.75rem;">+ Add Birds</button>
+          </div>
+          <div class="card-body">
+            <div class="flock-list">
+              <div class="flock-row">
+                <div class="flock-icon" style="background:var(--green-pale);"></div>
+                <div class="flock-info">
+                  <div class="flock-name">Layer Chickens (ISA Brown)</div>
+                  <div class="flock-detail">Batch 3 · Arrived 24 May 2026 · Day 18</div>
+                </div>
+                <div style="text-align:right;">
+                  <div class="flock-count">220</div>
+                  <div class="flock-health good">Healthy</div>
+                </div>
+              </div>
+              <div class="flock-row">
+                <div class="flock-icon" style="background:rgba(232,160,32,0.1);"></div>
+                <div class="flock-info">
+                  <div class="flock-name">Kienyeji (KALRO Improved)</div>
+                  <div class="flock-detail">Batch 2 · Free-range · 14 weeks old</div>
+                </div>
+                <div style="text-align:right;">
+                  <div class="flock-count">150</div>
+                  <div class="flock-health watch">Monitor</div>
+                </div>
+              </div>
+              <div class="flock-row">
+                <div class="flock-icon" style="background:var(--red-pale);"></div>
+                <div class="flock-info">
+                  <div class="flock-name">Day-old Chicks (Batch 4)</div>
+                  <div class="flock-detail">Arrived today · Brooder setup needed</div>
+                </div>
+                <div style="text-align:right;">
+                  <div class="flock-count">60</div>
+                  <div class="flock-health alert">New Arrival</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="card-footer-text">Mortality this month: 2 birds (0.5%)</span>
+            <button class="btn-sm btn-outline" style="font-size:0.72rem;padding:0.35rem 0.7rem;">View All Records</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Vaccination + Disease + Vet -->
+      <div class="grid-3">
+
+        <!-- Vaccination -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Vaccination Schedule</div>
+              <div class="card-sub">Batch 3 · Layer flock</div>
+            </div>
+            <span style="font-size:0.7rem;font-weight:700;padding:0.2rem 0.55rem;border-radius:999px;background:var(--red-pale);color:var(--red);">1 DUE</span>
+          </div>
+          <div class="card-body" style="padding:0.5rem 1.25rem;">
+            <div class="vacc-list">
+              <div class="vacc-item">
+                <div class="vacc-dot-wrap"><div class="vacc-dot done"></div></div>
+                <div class="vacc-info">
+                  <div class="vacc-name">Marek's Disease</div>
+                  <div class="vacc-detail">Day 1 — administered at hatchery</div>
+                </div>
+                <span class="vacc-badge done">✓ Done</span>
+              </div>
+              <div class="vacc-item">
+                <div class="vacc-dot-wrap"><div class="vacc-dot done"></div></div>
+                <div class="vacc-info">
+                  <div class="vacc-name">Infectious Bursal Disease</div>
+                  <div class="vacc-detail">Day 10 · Drinking water · Done</div>
+                </div>
+                <span class="vacc-badge done">✓ Done</span>
+              </div>
+              <div class="vacc-item" style="background:var(--red-pale);border-radius:8px;padding:0.7rem 0.5rem;margin:-2px;">
+                <div class="vacc-dot-wrap"><div class="vacc-dot due"></div></div>
+                <div class="vacc-info">
+                  <div class="vacc-name" style="color:var(--red);">Newcastle Disease (La Sota)</div>
+                  <div class="vacc-detail">Day 18 — <strong>DUE TODAY</strong> · Drinking water</div>
+                </div>
+                <span class="vacc-badge due-now">⚡ Today</span>
+              </div>
+              <div class="vacc-item">
+                <div class="vacc-dot-wrap"><div class="vacc-dot upcoming"></div></div>
+                <div class="vacc-info">
+                  <div class="vacc-name">Fowl Typhoid</div>
+                  <div class="vacc-detail">Day 28 · In 10 days · Injection</div>
+                </div>
+                <span class="vacc-badge upcoming">10 days</span>
+              </div>
+              <div class="vacc-item">
+                <div class="vacc-dot-wrap"><div class="vacc-dot upcoming"></div></div>
+                <div class="vacc-info">
+                  <div class="vacc-name">Newcastle Booster (Lasota)</div>
+                  <div class="vacc-detail">Day 56 · In 38 days</div>
+                </div>
+                <span class="vacc-badge upcoming">38 days</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="card-footer-text">SMS reminder sent to +254 712 ••• 678</span>
+            <button class="btn-sm btn-outline" style="font-size:0.72rem;padding:0.35rem 0.7rem;">Mark Done</button>
+          </div>
+        </div>
+
+        <!-- Disease Risk -->
+        <div class="card disease-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Disease Risk</div>
+              <div class="card-sub">AI assessment · Updated today</div>
+            </div>
+          </div>
+          <div class="disease-risk-meter">
+            <div class="risk-gauge">
+              <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="36" cy="36" r="30" fill="none" stroke="#D4E4D0" stroke-width="6"/>
+                <circle cx="36" cy="36" r="30" fill="none" stroke="#E67E22" stroke-width="6"
+                  stroke-dasharray="113 75" stroke-dashoffset="47" stroke-linecap="round"/>
+              </svg>
+              <div class="risk-label-center">
+                <div class="risk-pct">60%</div>
+                <div class="risk-word">Risk</div>
+              </div>
+            </div>
+            <div class="risk-meta">
+              <div class="risk-title">⚠️ Moderate Risk — Newcastle</div>
+              <div class="risk-desc">3 outbreak reports in Kajiado this week. Your Day-18 birds are in peak susceptibility window. Vaccinate today.</div>
+            </div>
+          </div>
+          <div class="disease-tips">
+            <div class="tip-row">
+              <div class="tip-icon" style="background:var(--orange-pale);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E67E22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              Isolate any birds showing respiratory symptoms
+            </div>
+            <div class="tip-row">
+              <div class="tip-icon" style="background:var(--green-pale);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3D6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              Disinfect drinkers before administering vaccine
+            </div>
+            <div class="tip-row">
+              <div class="tip-icon" style="background:var(--green-pale);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3D6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              Restrict farm visitors for 48 hours
+            </div>
+            <div class="tip-row">
+              <div class="tip-icon" style="background:var(--blue-pale);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2980B9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+              Kienyeji flock risk: Low — good immunity from outdoor exposure
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="card-footer-text" style="display:flex;align-items:center;gap:0.4rem;">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#6B7C69" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Reviewed by Guardian Agent
+            </span>
+            <button class="btn-sm btn-outline" style="font-size:0.72rem;padding:0.35rem 0.7rem;">Full Report</button>
+          </div>
+        </div>
+
+        <!-- Vet Assistance -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Veterinary Help</div>
+              <div class="card-sub">Available vets near Kajiado</div>
+            </div>
+            <span style="font-size:0.7rem;font-weight:700;padding:0.2rem 0.55rem;border-radius:999px;background:var(--green-pale);color:var(--green);">2 Online</span>
+          </div>
+          <div class="card-body">
+            <div class="vet-list">
+              <div class="vet-item">
+                <div class="vet-avatar">DK</div>
+                <div class="vet-info">
+                  <div class="vet-name">Dr. David Kimani</div>
+                  <div class="vet-spec">Poultry specialist · Kajiado town · 4.9 ★</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;">
+                  <span class="vet-avail online">● Online</span>
+                  <button class="btn-sm btn-primary" style="font-size:0.7rem;padding:0.3rem 0.7rem;">Chat</button>
+                </div>
+              </div>
+              <div class="vet-item">
+                <div class="vet-avatar" style="background:var(--blue);">AN</div>
+                <div class="vet-info">
+                  <div class="vet-name">Dr. Amina Njoroge</div>
+                  <div class="vet-spec">General poultry · Ngong · 4.7 ★</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;">
+                  <span class="vet-avail online">● Online</span>
+                  <button class="btn-sm btn-outline" style="font-size:0.7rem;padding:0.3rem 0.7rem;">Book</button>
+                </div>
+              </div>
+              <div class="vet-item">
+                <div class="vet-avatar" style="background:var(--muted);">JO</div>
+                <div class="vet-info">
+                  <div class="vet-name">Dr. John Omondi</div>
+                  <div class="vet-spec">Disease specialist · Athi River · 4.8 ★</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;">
+                  <span class="vet-avail busy">○ Busy</span>
+                  <button class="btn-sm btn-outline" style="font-size:0.7rem;padding:0.3rem 0.7rem;" disabled>Queue</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="card-footer-text">Emergency: 0800 723 XXX (free)</span>
+            <button class="btn-sm btn-outline" style="font-size:0.72rem;padding:0.35rem 0.7rem;">All Vets</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: Market Connect + Loan Readiness -->
+      <div class="grid-3-2">
+
+        <!-- Market Connect -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Market Connect</div>
+              <div class="card-sub">Live buyer requests &amp; market prices</div>
+            </div>
+            <button class="btn-sm btn-gold" style="font-size:0.75rem;padding:0.45rem 0.9rem;">Post My Produce</button>
+          </div>
+
+          <!-- Price ticker -->
+          <div class="price-ticker">
+            <div class="ticker-item">
+              <div class="ticker-name">Eggs · Nairobi</div>
+              <div class="ticker-price">KSh 480<small style="font-size:0.7rem;color:var(--muted)">/tray</small></div>
+              <div class="ticker-change up">↑ +6%</div>
+            </div>
+            <div class="ticker-item">
+              <div class="ticker-name">Eggs · Kajiado</div>
+              <div class="ticker-price">KSh 440<small style="font-size:0.7rem;color:var(--muted)">/tray</small></div>
+              <div class="ticker-change up">↑ +2%</div>
+            </div>
+            <div class="ticker-item">
+              <div class="ticker-name">Kienyeji · live</div>
+              <div class="ticker-price">KSh 850<small style="font-size:0.7rem;color:var(--muted)">/bird</small></div>
+              <div class="ticker-change up">↑ +10%</div>
+            </div>
+            <div class="ticker-item">
+              <div class="ticker-name">Layer hen · live</div>
+              <div class="ticker-price">KSh 520<small style="font-size:0.7rem;color:var(--muted)">/bird</small></div>
+              <div class="ticker-change down">↓ -3%</div>
+            </div>
+            <div class="ticker-item">
+              <div class="ticker-name">Chick (DOC)</div>
+              <div class="ticker-price">KSh 120<small style="font-size:0.7rem;color:var(--muted)">/chick</small></div>
+              <div class="ticker-change up">↑ +4%</div>
+            </div>
+          </div>
+
+          <!-- Market tabs -->
+          <div class="market-tabs">
+            <button class="market-tab active" onclick="setTab(this,'eggs')">🥚 Egg Buyers (3)</button>
+            <button class="market-tab" onclick="setTab(this,'birds')">🐓 Bird Buyers (2)</button>
+            <button class="market-tab" onclick="setTab(this,'my')">My Listings</button>
+          </div>
+
+          <div class="buyer-list" id="tab-eggs">
+            <div class="buyer-card">
+              <div class="buyer-avatar">🏪</div>
+              <div class="buyer-info">
+                <div class="buyer-name">Mama Njeri Grocery — Ongata Rongai</div>
+                <div class="buyer-need">Needs 30 trays/week, regular supply · pays on delivery</div>
+              </div>
+              <div class="buyer-right">
+                <div class="buyer-price">KSh 470/tray</div>
+                <div class="buyer-dist">12 km away</div>
+                <button class="btn-sm btn-primary" style="font-size:0.7rem;padding:0.3rem 0.7rem;margin-top:0.3rem;">Contact</button>
+              </div>
+            </div>
+            <div class="buyer-card">
+              <div class="buyer-avatar">🏨</div>
+              <div class="buyer-info">
+                <div class="buyer-name">Nairobi Catering Supplies Ltd.</div>
+                <div class="buyer-need">Needs 100+ trays this Friday · Formal invoice required</div>
+              </div>
+              <div class="buyer-right">
+                <div class="buyer-price">KSh 490/tray</div>
+                <div class="buyer-dist">38 km · Nairobi</div>
+                <span class="buyer-urgent">URGENT</span>
+              </div>
+            </div>
+            <div class="buyer-card">
+              <div class="buyer-avatar">🧑‍🍳</div>
+              <div class="buyer-info">
+                <div class="buyer-name">Lavington Restaurant Group</div>
+                <div class="buyer-need">Looking for free-range/kienyeji eggs · 20 trays/week</div>
+              </div>
+              <div class="buyer-right">
+                <div class="buyer-price">KSh 520/tray</div>
+                <div class="buyer-dist">42 km · Nairobi</div>
+                <button class="btn-sm btn-primary" style="font-size:0.7rem;padding:0.3rem 0.7rem;margin-top:0.3rem;">Contact</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="buyer-list" id="tab-birds" style="display:none;">
+            <div class="buyer-card">
+              <div class="buyer-avatar">🍗</div>
+              <div class="buyer-info">
+                <div class="buyer-name">Nyama Choma Point — Kitengela</div>
+                <div class="buyer-need">Needs 30 kienyeji birds monthly · live, market weight</div>
+              </div>
+              <div class="buyer-right">
+                <div class="buyer-price">KSh 820/bird</div>
+                <div class="buyer-dist">8 km away</div>
+                <button class="btn-sm btn-primary" style="font-size:0.7rem;padding:0.3rem 0.7rem;margin-top:0.3rem;">Contact</button>
+              </div>
+            </div>
+            <div class="buyer-card">
+              <div class="buyer-avatar">🛒</div>
+              <div class="buyer-info">
+                <div class="buyer-name">Quickmart Supermarket — Ngong Rd</div>
+                <div class="buyer-need">Bulk purchase — 80 layer hens, end-of-lay</div>
+              </div>
+              <div class="buyer-right">
+                <div class="buyer-price">KSh 480/bird</div>
+                <div class="buyer-dist">35 km · Nairobi</div>
+                <span class="buyer-urgent">BULK</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="buyer-list" id="tab-my" style="display:none;">
+            <div style="text-align:center;padding:2rem;color:var(--muted);font-size:0.85rem;">
+              <div style="font-size:2rem;margin-bottom:0.75rem;">📋</div>
+              You haven't posted any listings yet.<br>
+              <button class="btn-sm btn-gold" style="margin-top:0.75rem;">Post Your First Listing</button>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="card-footer-text">Prices updated 2 hrs ago · Nairobi Central Market</span>
+            <button class="btn-sm btn-outline" style="font-size:0.72rem;padding:0.35rem 0.7rem;">All Markets</button>
+          </div>
+        </div>
+
+        <!-- Loan Readiness -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Loan Readiness</div>
+              <div class="card-sub">Score re-evaluated monthly</div>
+            </div>
+          </div>
+          <div class="loan-score-wrap">
+            <div class="loan-score-circle">
+              <div class="loan-score-inner">
+                <div class="loan-score-num">67</div>
+                <div class="loan-score-max">/100</div>
+              </div>
+            </div>
+            <div class="loan-score-info">
+              <div class="loan-score-title">Moderate — Keep Building</div>
+              <div class="loan-score-sub">You're 33 points from a strong loan application. Focus on consistent egg records and reducing expenses this month.</div>
+            </div>
+          </div>
+          <div class="loan-criteria">
+            <div class="criteria-row">
+              <div class="criteria-label">Farm Records</div>
+              <div class="criteria-bar-wrap"><div class="criteria-bar" style="width:80%;background:var(--green);"></div></div>
+              <div class="criteria-val" style="color:var(--green);">80%</div>
+            </div>
+            <div class="criteria-row">
+              <div class="criteria-label">Revenue History</div>
+              <div class="criteria-bar-wrap"><div class="criteria-bar" style="width:70%;background:var(--gold);"></div></div>
+              <div class="criteria-val" style="color:var(--gold);">70%</div>
+            </div>
+            <div class="criteria-row">
+              <div class="criteria-label">Expense Tracking</div>
+              <div class="criteria-bar-wrap"><div class="criteria-bar" style="width:50%;background:var(--orange);"></div></div>
+              <div class="criteria-val" style="color:var(--orange);">50%</div>
+            </div>
+            <div class="criteria-row">
+              <div class="criteria-label">Flock Health</div>
+              <div class="criteria-bar-wrap"><div class="criteria-bar" style="width:90%;background:var(--green);"></div></div>
+              <div class="criteria-val" style="color:var(--green);">90%</div>
+            </div>
+            <div class="criteria-row">
+              <div class="criteria-label">Market Activity</div>
+              <div class="criteria-bar-wrap"><div class="criteria-bar" style="width:40%;background:var(--red);"></div></div>
+              <div class="criteria-val" style="color:var(--red);">40%</div>
+            </div>
+          </div>
+          <div class="card-body" style="padding-top:0;">
+            <div style="background:var(--sky);border-radius:9px;padding:0.75rem 1rem;font-size:0.78rem;color:var(--muted);line-height:1.55;border:1px solid var(--border);">
+              <strong style="color:var(--soil);">💡 AI Tip:</strong> Log your feed purchase receipts this week to improve your Expense Tracking score by ~15 points. That could unlock Equity Bank's Kilimo Biashara loan.
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="card-footer-text">Next evaluation: 1 July 2026</span>
+            <button class="btn-sm btn-gold" style="font-size:0.72rem;padding:0.4rem 0.8rem;">Improve Score</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row 4: Profile -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Farmer Profile</div>
+            <button class="btn-sm btn-outline" style="font-size:0.72rem;padding:0.4rem 0.75rem;">Edit Profile</button>
+          </div>
+          <div class="profile-card">
+            <div class="profile-avatar-big">GM</div>
+            <div>
+              <div class="profile-name">Grace Mwangi</div>
+              <div class="profile-meta">Member since March 2026 · Kajiado County</div>
+            </div>
+            <span class="pf-badge" style="margin-left:auto;">Verified Farmer</span>
+          </div>
+          <div class="profile-fields">
+            <div class="pf-row">
+              <div class="pf-label">Phone</div>
+              <div class="pf-val">+254 712 ••• 678</div>
+            </div>
+            <div class="pf-row">
+              <div class="pf-label">County</div>
+              <div class="pf-val">Kajiado</div>
+            </div>
+            <div class="pf-row">
+              <div class="pf-label">Farm Name</div>
+              <div class="pf-val">Mwangi Family Poultry Farm</div>
+            </div>
+            <div class="pf-row">
+              <div class="pf-label">Bird Types</div>
+              <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+                <span class="pf-badge">Layer</span>
+                <span class="pf-badge">Kienyeji</span>
+              </div>
+            </div>
+            <div class="pf-row">
+              <div class="pf-label">Language</div>
+              <div class="pf-val">English &amp; Kiswahili</div>
+            </div>
+            <div class="pf-row">
+              <div class="pf-label">Alerts via</div>
+              <div class="pf-val">SMS + WhatsApp</div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="card-footer-text">Age group: 35–44 · Experience: 3–5 years</span>
+          </div>
+        </div>
+
+        <!-- Financial Coach Quick Panel -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Financial Coach</div>
+              <div class="card-sub">This month's summary · June 2026</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;flex-direction:column;gap:0.65rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem 0.9rem;border:1px solid var(--border);border-radius:8px;background:var(--sky);">
+                <span style="font-size:0.82rem;color:var(--muted);font-weight:600;">Total Egg Revenue</span>
+                <span style="font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--green);">KSh 22,440</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem 0.9rem;border:1px solid var(--border);border-radius:8px;background:var(--sky);">
+                <span style="font-size:0.82rem;color:var(--muted);font-weight:600;">Birds Sold Revenue</span>
+                <span style="font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--green);">KSh 4,250</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem 0.9rem;border:1px solid var(--border);border-radius:8px;background:var(--sky);">
+                <span style="font-size:0.82rem;color:var(--muted);font-weight:600;">Total Expenses</span>
+                <span style="font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--red);">KSh 14,200</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.85rem 0.9rem;border:2px solid var(--green);border-radius:8px;background:var(--green-pale);">
+                <span style="font-size:0.87rem;color:var(--green);font-weight:700;">Net Profit</span>
+                <span style="font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--green);font-weight:400;">KSh 12,490</span>
+              </div>
+            </div>
+            <div style="margin-top:0.85rem;background:rgba(232,160,32,0.08);border:1px solid rgba(232,160,32,0.25);border-radius:9px;padding:0.75rem 1rem;font-size:0.78rem;color:#7D5B15;line-height:1.55;">
+              <strong>AI Coach:</strong> Your feed-to-revenue ratio is 42% — above the healthy 35% target. Consider buying feed in bulk with a neighbour to reduce costs.
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="card-footer-text">Profit up 3× vs. 12 months ago</span>
+            <button class="btn-sm btn-outline" style="font-size:0.72rem;padding:0.35rem 0.7rem;">Full Ledger</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- end overview -->
+
+  </main>
+</div>
+
+<!-- ══════ FOOTER ══════ -->
+<footer style="background:var(--soil);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
+  <span style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--warm-white);">Farm<b style="color:var(--gold);font-weight:400;">UP</b></span>
+  <p style="font-size:0.78rem;color:#5A6A58;">Empowering poultry farmers across Kenya · © 2026</p>
+  <p style="font-size:0.78rem;"><a href="index.html" style="color:#8FA48D;text-decoration:none;">Home</a> &nbsp;·&nbsp; <a href="#" style="color:#8FA48D;text-decoration:none;">Help</a></p>
+</footer>
+
+<script>
+  // Sidebar navigation
+  function showSection(id) {
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    // For this demo all content stays as overview; in production each section would load
+  }
+
+  // Market tabs
+  function setTab(btn, tab) {
+    document.querySelectorAll('.market-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    ['eggs','birds','my'].forEach(t => {
+      const el = document.getElementById('tab-'+t);
+      if (el) el.style.display = (t === tab) ? 'flex' : 'none';
+    });
+    if(tab==='eggs') document.getElementById('tab-eggs').style.display = 'flex';
+  }
+
+  // Make buyer cards interactive
+  document.querySelectorAll('.buyer-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (!e.target.closest('button')) {
+        this.style.borderColor = 'var(--green)';
+        this.style.background = 'var(--sky)';
+        setTimeout(()=>{ this.style.borderColor=''; this.style.background=''; }, 400);
+      }
+    });
+  });
+
+  // Bar chart hover labels
+  document.querySelectorAll('.bar').forEach(bar => {
+    bar.setAttribute('title', bar.closest('.bar-group')?.querySelector('.bar-val')?.textContent + ' trays');
+  });
+</script>
+</body>
+</html>

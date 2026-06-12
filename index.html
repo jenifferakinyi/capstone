@@ -1,134 +1,917 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FarmUP – From Day-Old Chick to Market</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<title>FarmUP AI</title>
+    :root {
+      --soil:        #2C1810;
+      --soil-mid:    #4A2E22;
+      --green:       #3D6B35;
+      --green-light: #5A9050;
+      --green-pale:  #E6F0E4;
+      --gold:        #E8A020;
+      --gold-light:  #F5C050;
+      --sky:         #F0F7EE;
+      --warm-white:  #FFFDF8;
+      --muted:       #6B7C69;
+      --border:      #D4E4D0;
+    }
 
-<link rel="stylesheet" href="style.css">
+    html { scroll-behavior: smooth; }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--soil);
+    }
 
+    /* ─── HEADER ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--soil);
+      border-bottom: 1px solid var(--soil-mid);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 38px; height: 38px;
+      background: var(--gold);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.85rem;
+      color: var(--warm-white);
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+
+    .logo-name b { color: var(--gold); font-weight: 400; }
+
+    nav { display: flex; align-items: center; gap: 0.2rem; }
+
+    nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #A8BCA6;
+      text-decoration: none;
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      transition: color 0.18s, background 0.18s;
+    }
+
+    nav a:hover { color: var(--warm-white); background: rgba(255,255,255,0.07); }
+
+    .btn-register {
+      background: var(--gold) !important;
+      color: var(--soil) !important;
+      font-weight: 700 !important;
+      padding: 0.5rem 1.2rem !important;
+      margin-left: 0.5rem;
+      border-radius: 6px;
+      transition: background 0.18s, transform 0.15s !important;
+    }
+
+    .btn-register:hover {
+      background: var(--gold-light) !important;
+      transform: translateY(-1px);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: var(--soil);
+      padding: 5.5rem 2rem 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: end;
+    }
+
+    .hero-left { padding-bottom: 5rem; }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 20px; height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      color: var(--warm-white);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 i {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: #8FA48D;
+      line-height: 1.7;
+      max-width: 420px;
+      margin-bottom: 2.25rem;
+      font-weight: 300;
+    }
+
+    .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+    .cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--gold);
+      color: var(--soil);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.18s, transform 0.15s;
+      box-shadow: 0 4px 24px rgba(232,160,32,0.35);
+    }
+
+    .cta-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .cta-secondary {
+      font-size: 0.875rem;
+      color: #8FA48D;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex; align-items: center; gap: 0.35rem;
+      transition: color 0.18s;
+    }
+
+    .cta-secondary:hover { color: var(--warm-white); }
+
+    /* Hero right: visual card stack */
+    .hero-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding-bottom: 3rem;
+    }
+
+    .hero-stat-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      backdrop-filter: blur(4px);
+      animation: slideIn 0.6s ease both;
+    }
+
+    .hero-stat-card:nth-child(2) { animation-delay: 0.1s; }
+    .hero-stat-card:nth-child(3) { animation-delay: 0.2s; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .hsc-icon {
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .hsc-body { flex: 1; }
+
+    .hsc-label {
+      font-size: 0.7rem;
+      color: #6B7C69;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .hsc-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--warm-white);
+    }
+
+    .hsc-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(61,107,53,0.3);
+      color: #7DC870;
+    }
+
+    /* ─── WAVE DIVIDER ─── */
+    .wave {
+      display: block;
+      width: 100%;
+      background: var(--soil);
+      line-height: 0;
+    }
+
+    /* ─── PROBLEM STRIP ─── */
+    .problem-strip {
+      background: var(--green);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .problem-strip p {
+      max-width: 780px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+      color: #C8E0C4;
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    .problem-strip strong { color: #fff; font-weight: 600; }
+
+    /* ─── AGENTS PIPELINE ─── */
+    .pipeline-section {
+      padding: 5.5rem 2rem;
+      background: var(--warm-white);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--soil);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .section-sub {
+      margin-top: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* Pipeline: horizontal connected agents */
+    .pipeline {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      position: relative;
+    }
+
+    /* connector line behind cards */
+    .pipeline::before {
+      content: '';
+      position: absolute;
+      top: 44px;
+      left: calc(10% + 20px);
+      right: calc(10% + 20px);
+      height: 2px;
+      background: linear-gradient(to right, var(--green-pale), var(--gold), var(--green-pale));
+      z-index: 0;
+    }
+
+    .agent-card {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 0.75rem;
+    }
+
+    .agent-icon-wrap {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--warm-white);
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      flex-shrink: 0;
+    }
+
+    .agent-card:hover .agent-icon-wrap {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(232,160,32,0.12);
+    }
+
+    .agent-step {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+
+    .agent-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      color: var(--soil);
+      margin-bottom: 0.4rem;
+      line-height: 1.2;
+    }
+
+    .agent-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* Guardian agent */
+    .guardian-wrap {
+      max-width: 1100px;
+      margin: 2.5rem auto 0;
+      background: linear-gradient(135deg, var(--soil) 0%, var(--soil-mid) 100%);
+      border-radius: 14px;
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .guardian-icon {
+      width: 52px; height: 52px;
+      background: rgba(232,160,32,0.15);
+      border: 1.5px solid rgba(232,160,32,0.3);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .guardian-body h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem;
+      color: var(--warm-white);
+      margin-bottom: 0.3rem;
+    }
+
+    .guardian-body p {
+      font-size: 0.85rem;
+      color: #8FA48D;
+      line-height: 1.55;
+    }
+
+    .guardian-tag {
+      margin-left: auto;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(232,160,32,0.12);
+      border: 1px solid rgba(232,160,32,0.25);
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ─── STATS ─── */
+    .stats-section {
+      background: var(--green);
+      padding: 4rem 2rem;
+    }
+
+    .stats-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .stat-item { padding: 1.5rem; }
+
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #A8C8A4;
+      line-height: 1.5;
+    }
+
+    /* ─── ABOUT ─── */
+    .about-section {
+      padding: 5.5rem 2rem;
+      background: var(--sky);
+    }
+
+    .about-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-copy .section-title { text-align: left; margin-bottom: 1.25rem; }
+
+    .about-copy p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 0.85rem;
+    }
+
+    .about-copy p strong { color: var(--soil); font-weight: 600; }
+
+    .about-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+    }
+
+    .badge {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      color: var(--green);
+      background: #fff;
+    }
+
+    .about-image-block {
+      background: var(--soil);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .about-quote {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      font-style: italic;
+      color: var(--gold-light);
+      line-height: 1.45;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .about-who {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .who-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      color: #8FA48D;
+    }
+
+    .who-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ─── CONTACT ─── */
+    .contact-section {
+      padding: 5.5rem 2rem;
+      background: var(--warm-white);
+    }
+
+    .contact-inner {
+      max-width: 560px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-inner .section-title { margin-bottom: 0.75rem; }
+
+    .contact-sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      text-align: left;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      background: var(--sky);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      color: var(--soil);
+      outline: none;
+      transition: border-color 0.18s, background 0.18s;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--green-light);
+      background: #fff;
+    }
+
+    .contact-form textarea { min-height: 110px; resize: vertical; }
+
+    .contact-form button {
+      background: var(--green);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.15s;
+    }
+
+    .contact-form button:hover {
+      background: var(--green-light);
+      transform: translateY(-1px);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--soil);
+      padding: 2.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--warm-white);
+    }
+
+    .footer-brand b { color: var(--gold); font-weight: 400; }
+
+    footer p {
+      font-size: 0.8rem;
+      color: #5A6A58;
+    }
+
+    footer a { color: #8FA48D; text-decoration: none; }
+    footer a:hover { color: var(--gold); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .pipeline { grid-template-columns: repeat(3, 1fr); row-gap: 2.5rem; }
+      .pipeline::before { display: none; }
+      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .pipeline { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      nav a:not(.btn-register) { display: none; }
+      .guardian-tag { display: none; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
 </head>
-
 <body>
 
-<nav>
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2C1810" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C12 2 5 8 5 14a7 7 0 0 0 14 0C19 8 12 2 12 2Z"/>
+          <line x1="12" y1="2" x2="12" y2="21"/>
+          <path d="M12 12 L8 9" opacity="0.6"/>
+          <path d="M12 9 L16 7" opacity="0.6"/>
+        </svg>
+      </div>
+      <span class="logo-name">Farm<b>UP</b></span>
+    </a>
+    <nav>
+      <a href="#about">About Us</a>
+      <a href="#contact">Contact</a>
+      <a href="register.html" class="btn-register">Register</a>
+    </nav>
+  </div>
+</header>
 
-<div class="logo"> <img src="/assets/logo.png">
- FarmUP
-</div>
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-tag">AI-powered · Kenya · Poultry Farmers</div>
+      <h1>
+        From <i>day-old chick</i><br>
+        to market-ready bird.<br>
+        We've got you covered.
+      </h1>
+      <p class="hero-desc">
+        FarmUP is a multi-agent AI platform built for rural women and youth
+        raising layer chicks and kienyeji chickens — giving you the veterinary
+        knowledge, market timing, and financial tools that bigger farms already have.
+      </p>
+      <div class="hero-actions">
+        <a href="register.html" class="cta-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Join FarmUP Free
+        </a>
+        <a href="#pipeline" class="cta-secondary">
+          See how it works
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
 
-<ul>
-<li><a href="#home">Home</a></li>
-<li><a href="#register">Register Farm</a></li>
-<li><a href="pages/dashboard.html">Dashboard</a></li>
-<li><a href="pages/governance.html">PRIDE Loop</a></li>
-</ul>
+    <div class="hero-visual">
+      <div class="hero-stat-card">
+        <div class="hsc-icon" style="background: rgba(61,107,53,0.25);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7DC870" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="hsc-body">
+          <div class="hsc-label">Disease Risk Today</div>
+          <div class="hsc-value">Low Risk</div>
+        </div>
+        <div class="hsc-badge">✓ Safe</div>
+      </div>
 
-</nav>
+      <div class="hero-stat-card">
+        <div class="hsc-icon" style="background: rgba(232,160,32,0.2);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C050" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="hsc-body">
+          <div class="hsc-label">Market Price · Nairobi</div>
+          <div class="hsc-value">KSh 480 / tray</div>
+        </div>
+        <div class="hsc-badge" style="background:rgba(232,160,32,0.2);color:#F5C050;">↑ 6%</div>
+      </div>
 
-<section class="hero" id="home">
+      <div class="hero-stat-card">
+        <div class="hsc-icon" style="background: rgba(255,255,255,0.06);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A8BCA6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="hsc-body">
+          <div class="hsc-label">Next Vaccination</div>
+          <div class="hsc-value">Newcastle · Day 18</div>
+        </div>
+        <div class="hsc-badge" style="background:rgba(255,255,255,0.06);color:#A8BCA6;">3 days</div>
+      </div>
+    </div>
+  </div>
 
-<div class="hero-content">
-
-<h1>Empowering Poultry Farmers Through AI</h1>
-
-<p>
-Trusted Multi-Agent Intelligence for Women and Youth Farmers Across Kenya.
-</p>
-
-<a href="#register" class="btn">Register Farm</a>
-
-</div>
-
+  <!-- wave bottom -->
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;margin-top:3rem;" preserveAspectRatio="none">
+    <path d="M0,40 C360,80 1080,0 1440,40 L1440,60 L0,60 Z" fill="#3D6B35"/>
+  </svg>
 </section>
 
-<section class="stats">
-
-<div class="card">
-<h2>37%</h2>
-<p>Loan Approval Increase</p>
+<!-- ══════════════ PROBLEM STRIP ══════════════ -->
+<div class="problem-strip">
+  <p>
+    Kenyan rural farmers lose birds to preventable disease, sell at the wrong time, and get rejected for loans — not because they're bad farmers, but because they've never had access to the <strong>right information at the right moment.</strong> FarmUP changes that.
+  </p>
 </div>
+<svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;background:var(--warm-white);" preserveAspectRatio="none">
+  <path d="M0,0 C360,40 1080,0 1440,30 L1440,0 Z" fill="#3D6B35"/>
+</svg>
 
-<div class="card">
-<h2>42%</h2>
-<p>Mortality Reduction</p>
-</div>
+<!-- ══════════════ AGENT PIPELINE ══════════════ -->
+<section class="pipeline-section" id="pipeline">
+  <div class="section-header">
+    <p class="eyebrow">The FarmUP System</p>
+    <h2 class="section-title">Five agents working<br>together for your farm</h2>
+    <p class="section-sub">Each agent specialises in one part of your journey — from the moment chicks arrive to the day you sell.</p>
+  </div>
 
-<div class="card">
-<h2>31%</h2>
-<p>Egg Production Growth</p>
-</div>
+  <div class="pipeline">
+    <div class="agent-card">
+      <div class="agent-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3D6B35" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      </div>
+      <p class="agent-step">Monitor</p>
+      <h3 class="agent-name">Farm Monitor</h3>
+      <p class="agent-desc">Tracks flock health, feed, water and environment. Spots problems before they spread.</p>
+    </div>
 
-<div class="card">
-<h2>95%</h2>
-<p>Data Governance</p>
-</div>
+    <div class="agent-card">
+      <div class="agent-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3D6B35" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <p class="agent-step">Protect</p>
+      <h3 class="agent-name">Disease Risk Agent</h3>
+      <p class="agent-desc">Assesses outbreak risk using local weather, disease reports, and your flock's history.</p>
+    </div>
 
+    <div class="agent-card">
+      <div class="agent-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3D6B35" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      </div>
+      <p class="agent-step">Sell Smart</p>
+      <h3 class="agent-name">Market Intelligence</h3>
+      <p class="agent-desc">Live egg and bird prices across Kenyan markets. Know when and where to sell for more.</p>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3D6B35" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <p class="agent-step">Build Wealth</p>
+      <h3 class="agent-name">Financial Coach</h3>
+      <p class="agent-desc">Teaches record-keeping, budgeting, and farm profitability — in plain language.</p>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3D6B35" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      </div>
+      <p class="agent-step">Access Credit</p>
+      <h3 class="agent-name">Loan Readiness</h3>
+      <p class="agent-desc">Evaluates your farm's loan profile and helps you build the records lenders need.</p>
+    </div>
+  </div>
+
+  <!-- Guardian Agent -->
+  <div class="guardian-wrap">
+    <div class="guardian-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A020" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div class="guardian-body">
+      <h3>Guardian Agent</h3>
+      <p>Every recommendation from every agent is reviewed by our Guardian Agent before it reaches you — enforcing ethical standards, safety controls, and local context to ensure advice you can trust.</p>
+    </div>
+    <div class="guardian-tag">Always watching</div>
+  </div>
 </section>
 
-<section id="register">
-
-<h2 class="section-title">Farm Registration</h2>
-
-<form id="farmForm">
-
-<input
-type="text"
-id="name"
-placeholder="Farmer Name"
-required
->
-
-<input
-type="text"
-id="county"
-placeholder="County"
-required
->
-
-<select id="gender">
-
-<option>Female</option>
-<option>Male</option>
-
-</select>
-
-<select id="birdType">
-
-<option>Layer</option>
-<option>Kienyeji</option>
-
-</select>
-
-<input
-type="number"
-id="birds"
-placeholder="Number of Birds"
-required
->
-
-<input
-type="number"
-id="income"
-placeholder="Monthly Income"
-required
->
-
-<button type="submit">
-Submit Farm Data
-</button>
-
-</form>
-
-<div id="success"></div>
-
+<!-- ══════════════ STATS ══════════════ -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-num">4,000+</div>
+      <div class="stat-label">Farmers supported across Kenya</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3×</div>
+      <div class="stat-label">Average income growth in year one</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">60%</div>
+      <div class="stat-label">Reduction in disease-related flock losses</div>
+    </div>
+  </div>
 </section>
 
-<script src="app.js"></script>
+<!-- ══════════════ ABOUT ══════════════ -->
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <div class="about-copy">
+      <p class="eyebrow">About Us</p>
+      <h2 class="section-title">Built for the farmer<br>who was left behind</h2>
+      <p>FarmUP was created because rural poultry farmers — especially <strong>women and youth</strong> — face a system that wasn't designed for them. Veterinary help is expensive and far away. Loan applications get rejected. Markets are unpredictable.</p>
+      <p>We built an AI ecosystem that works on low-bandwidth connections, speaks to farmers in their context, and turns their daily farm data into the financial records that unlock credit.</p>
+      <p>Our platform supports layer chick and kienyeji chicken farmers from the moment birds arrive to the moment they reach the market.</p>
+      <div class="about-badges">
+        <span class="badge">Layer Chicks</span>
+        <span class="badge">Kienyeji Chickens</span>
+        <span class="badge">Women Farmers</span>
+        <span class="badge">Youth in Agri</span>
+        <span class="badge">Rural Kenya</span>
+      </div>
+    </div>
+
+    <div class="about-image-block">
+      <p class="about-quote">"The best farming advice shouldn't only go to the biggest farms."</p>
+      <div class="about-who">
+        <div class="who-item"><div class="who-dot"></div><span>Works on low-bandwidth & basic smartphones</span></div>
+        <div class="who-item"><div class="who-dot"></div><span>Available in English and Swahili</span></div>
+        <div class="who-item"><div class="who-dot"></div><span>Free to register, no hidden charges</span></div>
+        <div class="who-item"><div class="who-dot"></div><span>AI advice reviewed for safety by Guardian Agent</span></div>
+        <div class="who-item"><div class="who-dot"></div><span>Vaccination reminders via SMS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CONTACT ══════════════ -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <p class="eyebrow">Contact</p>
+    <h2 class="section-title">Talk to us</h2>
+    <p class="contact-sub">Whether you're a farmer, a partner organisation, or a funder — we'd love to hear from you. We respond within one business day.</p>
+    <div class="contact-form">
+      <div class="form-row">
+        <input type="text" placeholder="Your name" autocomplete="name">
+        <input type="email" placeholder="Email address" autocomplete="email">
+      </div>
+      <input type="text" placeholder="Subject">
+      <textarea placeholder="Your message…"></textarea>
+      <button type="button">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <span class="footer-brand">Farm<b>UP</b></span>
+  <p>Empowering poultry farmers across Kenya · © 2025</p>
+  <p><a href="register.html">Register</a> &nbsp;·&nbsp; <a href="#contact">Contact</a> &nbsp;·&nbsp; <a href="#about">About</a></p>
+</footer>
 
 </body>
 </html>

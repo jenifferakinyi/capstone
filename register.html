@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register – FarmUP</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --soil:        #2C1810;
+      --soil-mid:    #4A2E22;
+      --green:       #3D6B35;
+      --green-light: #5A9050;
+      --green-pale:  #E6F0E4;
+      --gold:        #E8A020;
+      --gold-light:  #F5C050;
+      --sky:         #F0F7EE;
+      --warm-white:  #FFFDF8;
+      --muted:       #6B7C69;
+      --border:      #D4E4D0;
+      --error:       #C0392B;
+      --error-bg:    #FDF0EE;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--sky);
+      color: var(--soil);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--soil);
+      border-bottom: 1px solid var(--soil-mid);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 38px; height: 38px;
+      background: var(--gold);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.85rem;
+      color: var(--warm-white);
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+    .logo-name b { color: var(--gold); font-weight: 400; }
+
+    .header-login {
+      font-size: 0.875rem;
+      color: #A8BCA6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .header-login span {
+      color: var(--gold);
+      margin-left: 0.25rem;
+      font-weight: 700;
+      transition: color 0.18s;
+    }
+    .header-login:hover span { color: var(--gold-light); }
+
+    /* ─── PAGE LAYOUT ─── */
+    .page-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      min-height: calc(100vh - 68px);
+    }
+
+    /* ─── LEFT PANEL ─── */
+    .left-panel {
+      background: var(--soil);
+      padding: 3.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-panel::before {
+      content: '';
+      position: absolute;
+      bottom: -80px; right: -80px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61,107,53,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .left-panel::after {
+      content: '';
+      position: absolute;
+      top: -40px; left: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,160,32,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .panel-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.75rem;
+    }
+    .panel-tag::before {
+      content: '';
+      display: block;
+      width: 18px; height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    .left-panel h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+      color: var(--warm-white);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+    }
+    .left-panel h2 i { color: var(--gold-light); font-style: italic; }
+
+    .left-panel p {
+      font-size: 0.9rem;
+      color: #7A9478;
+      line-height: 1.75;
+      font-weight: 300;
+      max-width: 360px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Benefit list */
+    .benefit-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .benefit-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      color: #8FA48D;
+      line-height: 1.5;
+    }
+    .benefit-list li .check {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(61,107,53,0.3);
+      border: 1.5px solid rgba(93,158,80,0.4);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+    .benefit-list li .check svg { display: block; }
+
+    /* Testimonial card */
+    .testimonial {
+      margin-top: 2.75rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+    .testimonial p {
+      font-family: 'DM Serif Display', serif;
+      font-size: 0.95rem;
+      font-style: italic;
+      color: #C8D8C4;
+      line-height: 1.55;
+      margin-bottom: 0.75rem;
+    }
+    .testimonial-by {
+      font-size: 0.75rem;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── RIGHT PANEL / FORM ─── */
+    .right-panel {
+      background: var(--warm-white);
+      padding: 3rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .form-header {
+      margin-bottom: 2rem;
+    }
+    .form-header .eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .form-header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--soil);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .form-header p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .form-header p a {
+      color: var(--green);
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1.5px solid var(--green-pale);
+      transition: border-color 0.18s, color 0.18s;
+    }
+    .form-header p a:hover {
+      color: var(--green-light);
+      border-color: var(--green-light);
+    }
+
+    /* Step indicator */
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 2rem;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #B0C0AE;
+    }
+    .step.active { color: var(--green); }
+    .step.done { color: var(--muted); }
+    .step-num {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--green-pale);
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #B0C0AE;
+      flex-shrink: 0;
+    }
+    .step.active .step-num {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+    .step.done .step-num {
+      background: var(--green-pale);
+      border-color: var(--green);
+      color: var(--green);
+    }
+    .step-line {
+      flex: 1;
+      height: 1.5px;
+      background: var(--border);
+      margin: 0 0.5rem;
+      min-width: 24px;
+    }
+    .step-line.done { background: var(--green); }
+
+    /* Section headings inside form */
+    .form-section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      padding-bottom: 0.6rem;
+      border-bottom: 1.5px solid var(--green-pale);
+      margin-bottom: 1.1rem;
+      margin-top: 1.6rem;
+    }
+    .form-section-title:first-of-type { margin-top: 0; }
+
+    /* Form grid */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+    .form-grid .full { grid-column: 1 / -1; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .field label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--soil);
+      letter-spacing: 0.01em;
+    }
+    .field label .req {
+      color: var(--error);
+      margin-left: 2px;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      background: var(--sky);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      color: var(--soil);
+      outline: none;
+      transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7C69' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.85rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--green-light);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(61,107,53,0.08);
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder { color: #A8BCA6; }
+
+    .field textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    /* Phone field with prefix */
+    .phone-wrap {
+      display: flex;
+      gap: 0;
+    }
+    .phone-prefix {
+      background: var(--green-pale);
+      border: 1.5px solid var(--border);
+      border-right: none;
+      border-radius: 8px 0 0 8px;
+      padding: 0 0.85rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .phone-wrap input {
+      border-radius: 0 8px 8px 0 !important;
+    }
+
+    /* Gender radio buttons */
+    .gender-group {
+      display: flex;
+      gap: 0.6rem;
+    }
+    .gender-opt {
+      flex: 1;
+      cursor: pointer;
+    }
+    .gender-opt input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+      pointer-events: none;
+    }
+    .gender-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.65rem 0.5rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--sky);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s, color 0.18s;
+      user-select: none;
+    }
+    .gender-opt input[type="radio"]:checked + .gender-label {
+      border-color: var(--green);
+      background: var(--green-pale);
+      color: var(--green);
+    }
+
+    /* Bird type checkboxes */
+    .bird-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .bird-opt {
+      cursor: pointer;
+    }
+    .bird-opt input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+      pointer-events: none;
+    }
+    .bird-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--sky);
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+    }
+    .bird-opt input[type="checkbox"]:checked + .bird-label {
+      border-color: var(--green);
+      background: var(--green-pale);
+    }
+    .bird-check-box {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.18s, background 0.18s;
+    }
+    .bird-opt input[type="checkbox"]:checked + .bird-label .bird-check-box {
+      background: var(--green);
+      border-color: var(--green);
+    }
+    .bird-check-box svg { display: none; }
+    .bird-opt input[type="checkbox"]:checked + .bird-label .bird-check-box svg { display: block; }
+
+    .bird-info { flex: 1; }
+    .bird-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--soil);
+      margin-bottom: 0.15rem;
+    }
+    .bird-desc {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* Password strength */
+    .pw-strength {
+      margin-top: 0.4rem;
+      display: flex;
+      gap: 0.3rem;
+      align-items: center;
+    }
+    .pw-bar {
+      height: 3px;
+      flex: 1;
+      border-radius: 99px;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+    .pw-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      white-space: nowrap;
+      margin-left: 0.4rem;
+    }
+
+    /* Terms */
+    .terms-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .terms-row input[type="checkbox"] {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid var(--border);
+      background: var(--sky);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+      accent-color: var(--green);
+    }
+    .terms-row label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.55;
+      cursor: pointer;
+    }
+    .terms-row label a {
+      color: var(--green);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .terms-row label a:hover { text-decoration: underline; }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      background: var(--green);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.975rem;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+      box-shadow: 0 4px 18px rgba(61,107,53,0.22);
+    }
+    .btn-submit:hover {
+      background: var(--green-light);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(61,107,53,0.3);
+    }
+    .btn-submit:active { transform: translateY(0); }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .login-footer a {
+      color: var(--green);
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 1.5px solid var(--green-pale);
+      transition: border-color 0.18s;
+    }
+    .login-footer a:hover { border-color: var(--green); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--soil);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .footer-brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      color: var(--warm-white);
+    }
+    .footer-brand b { color: var(--gold); font-weight: 400; }
+    footer p {
+      font-size: 0.78rem;
+      color: #5A6A58;
+    }
+    footer a { color: #8FA48D; text-decoration: none; }
+    footer a:hover { color: var(--gold); }
+
+    /* ─── SUCCESS STATE ─── */
+    .success-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 2rem;
+      flex: 1;
+    }
+    .success-screen.visible { display: flex; }
+    .success-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--green-pale);
+      border: 2px solid var(--green);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .success-screen h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--soil);
+      margin-bottom: 0.75rem;
+    }
+    .success-screen p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 380px;
+      line-height: 1.65;
+      margin-bottom: 2rem;
+    }
+    .btn-dashboard {
+      background: var(--gold);
+      color: var(--soil);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-dashboard:hover { background: var(--gold-light); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 960px) {
+      .page-body { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .right-panel { padding: 2rem 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .full { grid-column: 1; }
+      .gender-group { gap: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2C1810" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C12 2 5 8 5 14a7 7 0 0 0 14 0C19 8 12 2 12 2Z"/>
+          <line x1="12" y1="2" x2="12" y2="21"/>
+          <path d="M12 12 L8 9" opacity="0.6"/>
+          <path d="M12 9 L16 7" opacity="0.6"/>
+        </svg>
+      </div>
+      <span class="logo-name">Farm<b>UP</b></span>
+    </a>
+    <a href="login.html" class="header-login">Already have an account? <span>Log in →</span></a>
+  </div>
+</header>
+
+<!-- ══════════════ PAGE BODY ══════════════ -->
+<div class="page-body">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="panel-tag">Free to join</div>
+    <h2>Your farm,<br><i>smarter</i> from<br>day one.</h2>
+    <p>Join thousands of Kenyan poultry farmers who use FarmUP to protect their flocks, sell at the right time, and build their financial future.</p>
+
+    <ul class="benefit-list">
+      <li>
+        <div class="check">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#7DC870" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+        </div>
+        Disease alerts and vaccination reminders sent to your phone
+      </li>
+      <li>
+        <div class="check">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#7DC870" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+        </div>
+        Live egg and bird prices across Kenyan markets
+      </li>
+      <li>
+        <div class="check">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#7DC870" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+        </div>
+        Financial coaching to grow profits and access credit
+      </li>
+      <li>
+        <div class="check">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#7DC870" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+        </div>
+        Works on low-bandwidth — even basic smartphones
+      </li>
+      <li>
+        <div class="check">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#7DC870" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+        </div>
+        Available in English and Kiswahili — no charge to register
+      </li>
+    </ul>
+
+    <div class="testimonial">
+      <p>"Before FarmUP I lost 40 birds to Newcastle. Now I get a warning before it spreads. My income has doubled."</p>
+      <div class="testimonial-by">Grace M. · Kiambu County · Layer Farmer</div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel" id="formPanel">
+
+    <!-- Step indicator -->
+    <div class="steps">
+      <div class="step active" id="step1-ind">
+        <div class="step-num" id="s1n">1</div>
+        <span>Your Profile</span>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="step" id="step2-ind">
+        <div class="step-num" id="s2n">2</div>
+        <span>Your Farm</span>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="step" id="step3-ind">
+        <div class="step-num" id="s3n">3</div>
+        <span>Account</span>
+      </div>
+    </div>
+
+    <div class="form-header">
+      <p class="eyebrow">Create your account</p>
+      <h1>Join FarmUP — free</h1>
+      <p>Already have an account? <a href="login.html">Log in here</a></p>
+    </div>
+
+    <form id="regForm" novalidate>
+
+      <!-- ── STEP 1: Personal Info ── -->
+      <div id="formStep1">
+
+        <p class="form-section-title">Personal Information</p>
+        <div class="form-grid">
+
+          <div class="field">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" id="firstName" placeholder="e.g. Grace" autocomplete="given-name" required>
+          </div>
+
+          <div class="field">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" id="lastName" placeholder="e.g. Mwangi" autocomplete="family-name" required>
+          </div>
+
+          <div class="field">
+            <label>Gender <span class="req">*</span></label>
+            <div class="gender-group">
+              <label class="gender-opt">
+                <input type="radio" name="gender" value="female">
+                <div class="gender-label">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M12 12v8M9 18h6"/></svg>
+                  Female
+                </div>
+              </label>
+              <label class="gender-opt">
+                <input type="radio" name="gender" value="male">
+                <div class="gender-label">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="14" r="4"/><line x1="22" y1="2" x2="14" y2="10"/><polyline points="16 2 22 2 22 8"/></svg>
+                  Male
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="age">Age Range <span class="req">*</span></label>
+            <select id="age" required>
+              <option value="" disabled selected>Select your age range</option>
+              <option value="15-29">15 – 29 years (Youth)</option>
+              <option value="30-34">30 – 34 years</option>
+              <option value="35-44">35 – 44 years</option>
+              <option value="45-54">45 – 54 years</option>
+              <option value="55-64">55 – 64 years</option>
+              <option value="65+">65 years and above</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="phone">Phone Number <span class="req">*</span></label>
+            <div class="phone-wrap">
+              <div class="phone-prefix">🇰🇪 +254</div>
+              <input type="tel" id="phone" placeholder="712 345 678" autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="field full">
+            <label for="language">Preferred Language</label>
+            <select id="language">
+              <option value="en" selected>English</option>
+              <option value="sw">Kiswahili</option>
+              <option value="en-sw">English & Kiswahili</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div style="margin-top:1.5rem; display:flex; justify-content:flex-end;">
+          <button type="button" class="btn-submit" style="width:auto; padding: 0.8rem 2.25rem; margin-top:0;" onclick="nextStep(2)">
+            Continue to Farm Details
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Farm Info ── -->
+      <div id="formStep2" style="display:none;">
+
+        <p class="form-section-title">Farm Location</p>
+        <div class="form-grid">
+
+          <div class="field">
+            <label for="county">County <span class="req">*</span></label>
+            <select id="county" required>
+              <option value="" disabled selected>Select county</option>
+              <option>Baringo</option><option>Bomet</option><option>Bungoma</option><option>Busia</option>
+              <option>Elgeyo-Marakwet</option><option>Embu</option><option>Garissa</option><option>Homa Bay</option>
+              <option>Isiolo</option><option>Kajiado</option><option>Kakamega</option><option>Kericho</option>
+              <option>Kiambu</option><option>Kilifi</option><option>Kirinyaga</option><option>Kisii</option>
+              <option>Kisumu</option><option>Kitui</option><option>Kwale</option><option>Laikipia</option>
+              <option>Lamu</option><option>Machakos</option><option>Makueni</option><option>Mandera</option>
+              <option>Marsabit</option><option>Meru</option><option>Migori</option><option>Mombasa</option>
+              <option>Murang'a</option><option>Nairobi</option><option>Nakuru</option><option>Nandi</option>
+              <option>Narok</option><option>Nyamira</option><option>Nyandarua</option><option>Nyeri</option>
+              <option>Samburu</option><option>Siaya</option><option>Taita-Taveta</option><option>Tana River</option>
+              <option>Tharaka-Nithi</option><option>Trans Nzoia</option><option>Turkana</option><option>Uasin Gishu</option>
+              <option>Vihiga</option><option>Wajir</option><option>West Pokot</option>
+            </select>
+          </div>
+
+
+          <div class="field full">
+            <label for="farmName">Farm Name <span class="req">*</span></label>
+            <input type="text" id="farmName" placeholder="e.g. Mwangi Family Poultry Farm" required>
+          </div>
+
+        </div>
+
+        <p class="form-section-title" style="margin-top:1.75rem;">Type of Birds You Raise</p>
+        <div class="field full">
+          <label style="margin-bottom:0.6rem; display:block;">Choose up to three types <span class="req">*</span></label>
+          <div class="bird-group">
+
+            <label class="bird-opt">
+              <input type="checkbox" name="birdType" value="layer">
+              <div class="bird-label">
+                <div class="bird-check-box">
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+                </div>
+                <div class="bird-info">
+                  <div class="bird-name">Layer Chickens (Commercial)</div>
+                  <div class="bird-desc">ISA Brown, Kenbro — raised primarily for egg production</div>
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0C0AE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="5" ry="7"/></svg>
+              </div>
+            </label>
+
+            <label class="bird-opt">
+              <input type="checkbox" name="birdType" value="kienyeji">
+              <div class="bird-label">
+                <div class="bird-check-box">
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+                </div>
+                <div class="bird-info">
+                  <div class="bird-name">Kienyeji Chickens (Indigenous)</div>
+                  <div class="bird-desc">KALRO-improved or pure indigenous — dual purpose, free-range hardy breeds</div>
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0C0AE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+            </label>
+
+            <label class="bird-opt">
+              <input type="checkbox" name="birdType" value="broiler">
+              <div class="bird-label">
+                <div class="bird-check-box">
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+                </div>
+                <div class="bird-info">
+                  <div class="bird-name">Broiler Chickens (Meat)</div>
+                  <div class="bird-desc">Raised for fast meat production — Cobb 500, Ross 308</div>
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0C0AE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
+              </div>
+            </label>
+
+            <label class="bird-opt">
+              <input type="checkbox" name="birdType" value="turkey">
+              <div class="bird-label">
+                <div class="bird-check-box">
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+                </div>
+                <div class="bird-info">
+                  <div class="bird-name">Ducks / Guinea Fowl / Turkey</div>
+                  <div class="bird-desc">Other poultry types</div>
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0C0AE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+        <p class="form-section-title" style="margin-top:1.75rem;">Flock Details</p>
+        <div class="form-grid">
+
+          <div class="field">
+            <label for="flockSize">Current Flock Size <span class="req">*</span></label>
+            <select id="flockSize" required>
+              <option value="" disabled selected>Number of birds</option>
+              <option value="1-50">1 – 50 birds</option>
+              <option value="51-100">51 – 100 birds</option>
+              <option value="101-250">101 – 250 birds</option>
+              <option value="251-500">251 – 500 birds</option>
+              <option value="501-1000">501 – 1,000 birds</option>
+              <option value="1000+">Over 1,000 birds</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="experience">Years of Farming Experience</label>
+            <select id="experience">
+              <option value="" disabled selected>Select experience</option>
+              <option value="new">Just starting out</option>
+              <option value="1-2">1 – 2 years</option>
+              <option value="3-5">3 – 5 years</option>
+              <option value="6-10">6 – 10 years</option>
+              <option value="10+">More than 10 years</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="housingType">Housing Type</label>
+            <select id="housingType">
+              <option value="" disabled selected>Select housing</option>
+              <option value="deep_litter">Deep litter (enclosed)</option>
+              <option value="free_range">Free range / open</option>
+              <option value="battery_cage">Battery cage (layers)</option>
+              <option value="semi_intensive">Semi-intensive</option>
+              <option value="backyard">Backyard / traditional</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="marketAccess">Main Market Access</label>
+            <select id="marketAccess">
+              <option value="" disabled selected>Where do you sell?</option>
+              <option value="local_market">Local market / roadside</option>
+              <option value="middlemen">Through middlemen / brokers</option>
+              <option value="supermarket">Supermarkets / shops</option>
+              <option value="direct">Direct to consumers</option>
+              <option value="cooperative">Cooperative / group</option>
+              <option value="none">Not yet selling</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="challenges">Biggest Farming Challenge (optional)</label>
+            <textarea id="challenges" placeholder="e.g. Disease outbreaks, feed costs, finding buyers at the right price…"></textarea>
+          </div>
+
+        </div>
+
+        <div style="margin-top:1.5rem; display:flex; gap:0.75rem; justify-content:space-between; align-items:center;">
+          <button type="button" onclick="nextStep(1)" style="background:none; border:1.5px solid var(--border); color:var(--muted); font-family:'DM Sans',sans-serif; font-size:0.875rem; font-weight:600; padding:0.75rem 1.25rem; border-radius:8px; cursor:pointer; transition:border-color 0.18s;">
+            ← Back
+          </button>
+          <button type="button" class="btn-submit" style="width:auto; padding:0.8rem 2.25rem; margin-top:0;" onclick="nextStep(3)">
+            Continue to Account Setup
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Account ── -->
+      <div id="formStep3" style="display:none;">
+
+        <p class="form-section-title">Create Your Account</p>
+        <div class="form-grid">
+
+          <div class="field full">
+            <label for="email">Email Address <span class="req">*</span></label>
+            <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+
+          <div class="field">
+            <label for="password">Password <span class="req">*</span></label>
+            <input type="password" id="password" placeholder="At least 8 characters" required oninput="checkStrength(this.value)">
+            <div class="pw-strength">
+              <div class="pw-bar" id="bar1"></div>
+              <div class="pw-bar" id="bar2"></div>
+              <div class="pw-bar" id="bar3"></div>
+              <div class="pw-bar" id="bar4"></div>
+              <span class="pw-label" id="pwLabel">–</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="confirmPassword">Confirm Password <span class="req">*</span></label>
+            <input type="password" id="confirmPassword" placeholder="Re-enter password" required>
+          </div>
+
+        </div>
+
+        <p class="form-section-title" style="margin-top:1.75rem;">Notifications & Alerts</p>
+        <div class="form-grid">
+          <div class="field full">
+            <label for="smsAlerts">Send me alerts by</label>
+            <select id="smsAlerts">
+              <option value="sms">SMS only</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="both" selected>Both SMS and WhatsApp</option>
+              <option value="none">I'll check the app myself</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="referral">How did you hear about FarmUP?</label>
+            <select id="referral">
+              <option value="" disabled selected>Choose one</option>
+              <option value="friend">Friend or fellow farmer</option>
+              <option value="radio">Radio / TV</option>
+              <option value="ngo">NGO or extension officer</option>
+              <option value="social">Social media</option>
+              <option value="sacco">SACCO or cooperative</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="terms-row" style="margin-top:1rem;">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">I agree to FarmUP's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I understand my farm data will be used to improve AI recommendations and will never be sold to third parties.</label>
+        </div>
+
+        <div class="terms-row" style="margin-top:0.5rem;">
+          <input type="checkbox" id="smsConsent">
+          <label for="smsConsent">I consent to receive vaccination reminders, disease alerts, and market updates via SMS or WhatsApp.</label>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Create My FarmUP Account
+        </button>
+
+        <div style="margin-top:1rem; display:flex; justify-content:center;">
+          <button type="button" onclick="nextStep(2)" style="background:none; border:none; color:var(--muted); font-family:'DM Sans',sans-serif; font-size:0.8rem; font-weight:600; cursor:pointer; padding:0.4rem 0.8rem; border-radius:6px; transition:color 0.18s;">
+            ← Back to Farm Details
+          </button>
+        </div>
+
+        <div class="login-footer">
+          Already have an account? <a href="login.html">Log in here</a>
+        </div>
+
+      </div>
+
+    </form>
+
+    <!-- ── SUCCESS ── -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3D6B35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Welcome to FarmUP!</h2>
+      <p>Your account has been created. We've sent a confirmation to your phone. Your Guardian Agent is already watching over your farm.</p>
+      <button class="btn-dashboard" onclick="alert('Redirecting to dashboard…')">Go to My Dashboard →</button>
+    </div>
+
+  </div><!-- end right-panel -->
+</div><!-- end page-body -->
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <span class="footer-brand">Farm<b>UP</b></span>
+  <p>Empowering poultry farmers across Kenya · © 2025</p>
+  <p><a href="index.html">← Back to Home</a> &nbsp;·&nbsp; <a href="#contact">Contact</a></p>
+</footer>
+
+<script>
+  // ── Step navigation ──
+  function nextStep(n) {
+    [1,2,3].forEach(i => {
+      document.getElementById('formStep'+i).style.display = 'none';
+    });
+    document.getElementById('formStep'+n).style.display = 'block';
+
+    // Update indicators
+    [1,2,3].forEach(i => {
+      const ind = document.getElementById('step'+i+'-ind');
+      const num = document.getElementById('s'+i+'n');
+      ind.classList.remove('active','done');
+      if (i < n) {
+        ind.classList.add('done');
+        num.innerHTML = `<svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#3D6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>`;
+      } else if (i === n) {
+        ind.classList.add('active');
+        num.textContent = i;
+      } else {
+        num.textContent = i;
+      }
+    });
+
+    [1,2].forEach(i => {
+      const line = document.getElementById('line'+i);
+      if (n > i) line.classList.add('done');
+      else line.classList.remove('done');
+    });
+
+    // Scroll form panel top
+    document.getElementById('formPanel').scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Password strength ──
+  function checkStrength(pw) {
+    const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3'), document.getElementById('bar4')];
+    const label = document.getElementById('pwLabel');
+    const reset = () => bars.forEach(b => b.style.background = 'var(--border)');
+    reset();
+
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+    const colors = ['#C0392B','#E67E22','#E8A020','#3D6B35'];
+    const labels = ['Weak','Fair','Good','Strong'];
+    for (let i = 0; i < score; i++) bars[i].style.background = colors[score-1];
+    label.textContent = score > 0 ? labels[score-1] : '–';
+    label.style.color = score > 0 ? colors[score-1] : 'var(--muted)';
+  }
+
+  // ── Bird type: max 3 ──
+  document.querySelectorAll('input[name="birdType"]').forEach(cb => {
+    cb.addEventListener('change', function() {
+      const checked = document.querySelectorAll('input[name="birdType"]:checked');
+      if (checked.length > 3) {
+        this.checked = false;
+      }
+    });
+  });
+
+  // ── Form submit ──
+  document.getElementById('regForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const termsChecked = document.getElementById('terms').checked;
+    if (!termsChecked) {
+      alert('Please accept the Terms of Service to continue.');
+      return;
+    }
+    const pw = document.getElementById('password').value;
+    const cpw = document.getElementById('confirmPassword').value;
+    if (pw !== cpw) {
+      alert('Passwords do not match. Please check and try again.');
+      return;
+    }
+
+    // Show success
+    document.getElementById('regForm').style.display = 'none';
+    document.querySelector('.steps').style.display = 'none';
+    document.querySelector('.form-header').style.display = 'none';
+    document.getElementById('successScreen').classList.add('visible');
+  });
+</script>
+
+</body>
+</html>
